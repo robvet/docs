@@ -1,7 +1,7 @@
 ---
 title: Cloud-native resiliency
 description: Architecting Cloud Native .NET Apps for Azure | Cloud Native Resiliency
-ms.date: 06/30/2019
+ms.date: 03/22/2020
 ---
 # Cloud-native resiliency
 
