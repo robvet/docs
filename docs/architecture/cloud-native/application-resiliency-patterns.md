@@ -1,25 +1,36 @@
 ---
 title: Application resiliency patterns
 description: Architecting Cloud Native .NET Apps for Azure | Application Resiliency Patterns
-ms.date: 06/30/2019
+ms.date: 04/14/2020
 ---
+
 # Application resiliency patterns
 
 [!INCLUDE [book-preview](../../../includes/book-preview.md)]
 
-The first line of defense is software-enabled application resiliency.
+The first line of defense is application resiliency.
 
-While you could invest considerable time writing your own resiliency framework, such products already exist. For example, [Polly](http://www.thepollyproject.org/) is a comprehensive .NET resilience and transient-fault-handling library that allows developers to express resiliency policies in a fluent and thread-safe manner. Polly targets applications built with either the full .NET Framework or .NET Core. Figure 6-2 shows the resiliency policies (that is, functionality) available from the Polly Library. These policies can be applied individually or combined together.
+While you could invest considerable time writing your own resiliency framework, such products already exist. For example, [Polly](http://www.thepollyproject.org/) is a comprehensive .NET resilience and transient-fault-handling library that allows developers to express resiliency policies in a fluent and thread-safe manner. Polly targets applications built with either the full .NET Framework or .NET Core. The following table describes the resiliency features, called `policies`, available in the Polly Library. They can be applied individually or grouped together.
 
-![Polly framework](./media/polly-resiliency-framework.png)
+| Policy | Experience |
+| :-------- | :-------- |
+| Retry | Configures retry operations on designated operations. |
+| Circuit Breaker | Blocks requested operations for a predefined period when faults exceed a configured threshold |
+| Timeout | Places limit on the duration for which a caller can wait for a response. |
+| Bulkhead | Constrains actions to fixed-size resource pool to prevent failing calls from swamping a resource. |
+| Cache | Stores responses automatically. |
+| Fallback | Defines alternative value upon a failure. |
 
-**Figure 6-2**. Polly resiliency framework features
+Note how in the previous figure the resiliency policies apply to request messages, whether coming from an external client or back-end service. The goal is to compensate the request for a service that might be momentarily unavailable. These short interruptions typically manifest themselves with the HTTP status codes shown in the following table.
 
-Note how in the previous figure the resiliency policies apply to request messages, whether coming from an external client or another back-end service. The goal is to compensate the request for a service that might be momentarily unavailable. These short interruptions typically manifest themselves with the HTTP status codes shown in Figure 6-3.
-
-![HTTP status codes to retry](./media/http-status-codes.png)
-
-**Figure 6-3**. HTTP status codes to retry
+| HTTP Status Code| Cause |
+| :-------- | :-------- |
+| 404 | Not Found |
+| 408 | Request timeout |
+| 429 | Too many requests (you've most likely been throttled) |
+| 502 | Bad gateway |
+| 503 | Service unavailable |
+| 504 | Gateway timeout |
 
 Question: Would you retry an HTTP Status Code of 403 - Forbidden? No. Here, the system is functioning properly, but informing the caller that they aren't authorized to perform the requested operation. Care must be taken to retry only those operations caused by failures.
 
@@ -29,13 +40,13 @@ Next, let's expand on retry and circuit breaker patterns.
 
 ### Retry pattern
 
-In a distributed cloud-native environment, calls to services and cloud resources can fail because of transient (short-lived) failures, which typically correct themselves after a brief period of time. Implementing a retry strategy helps a cloud-native service handle these scenarios.
+In a distributed cloud-native environment, calls to services and cloud resources can fail because of transient (short-lived) failures, which typically correct themselves after a brief period of time. Implementing a retry strategy helps a cloud-native service get past these scenarios.
 
-The [Retry pattern](https://docs.microsoft.com/azure/architecture/patterns/retry) enables a service to retry a failed request operation a (configurable) number of times with an exponentially increasing wait time. Figure 6-4 shows a retry in action.
+The [Retry pattern](https://docs.microsoft.com/azure/architecture/patterns/retry) enables a service to retry a failed request operation a (configurable) number of times with an exponentially increasing wait time. Figure 6-2 shows a retry in action.
 
 ![Retry pattern in action](./media/retry-pattern.png)
 
-**Figure 6-4**. Retry pattern in action
+**Figure 6-2**. Retry pattern in action
 
 In the previous figure, a retry pattern has been implemented for a request operation. It's configured to allow up to four retries before failing with a backoff interval (wait time) starting at two seconds, which exponentially doubles for each subsequent attempt.
 
@@ -54,11 +65,11 @@ To make things worse, executing continual retry operations on a non-responsive s
 
 In these situations, it would be preferable for the operation to fail immediately and only attempt to invoke the service if it's likely to succeed.
 
-The [Circuit Breaker pattern](https://docs.microsoft.com/azure/architecture/patterns/circuit-breaker) can prevent an application from repeatedly trying to execute an operation that's likely to fail. It also monitors the application with a periodic trial call to determine whether the fault has resolved. Figure 6-5 shows the Circuit Breaker pattern in action.
+The [Circuit Breaker pattern](https://docs.microsoft.com/azure/architecture/patterns/circuit-breaker) can prevent an application from repeatedly trying to execute an operation that's likely to fail. It also monitors the application with a periodic trial call to determine whether the fault has resolved. Figure 6-3 shows the Circuit Breaker pattern in action.
 
 ![Circuit breaker pattern in action](./media/circuit-breaker-pattern.png)
 
-**Figure 6-5**. Circuit breaker pattern in action
+**Figure 6-3**. Circuit breaker pattern in action
 
 In the previous figure, a Circuit Breaker pattern has been added to the original retry pattern. Note how after 10 failed requests, the circuit breakers opens and no longer allows calls to the service. The CheckCircuit value, set at 30 seconds, specifies how often the library allows one request to proceed to the service. If that call succeeds, the circuit closes and the service is once again available to traffic.
 
