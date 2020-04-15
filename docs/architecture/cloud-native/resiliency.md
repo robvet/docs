@@ -8,6 +8,10 @@ ms.date: 04/14/2020
 
 Resiliency is the ability of your system to react to failure and still remain functional. It's not about avoiding failure, but accepting failure as inevitable and building your in cloud-native services to respond to it. The end-goal of resiliency is to return the application to a fully functioning state after a failure.
 
+Cloud-native systems take full advantage of the cloud computing model. Your services must know how to thrive in a dynamic, virtualized cloud environment. They will make extensive use of Platform as a Service (PaaS) compute infrastructure and managed services. The caveat: Cloud infrastructure and networking are inherently unreliable.
+
+Cloud vendors are able to detect and mitigate platform failure. Your service will be restarted, scale out and in, and distributed across nodes. Your services must be design services to run in this environment.  
+
 
 > Discuss Resil, Redund, Consistency, and Avail
 
