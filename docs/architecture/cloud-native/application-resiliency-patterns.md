@@ -34,6 +34,9 @@ Note how in the previous figure the resiliency policies apply to request message
 
 Question: Would you retry an HTTP Status Code of 403 - Forbidden? No. Here, the system is functioning properly, but informing the caller that they aren't authorized to perform the requested operation. Care must be taken to retry only those operations caused by failures.
 
+> Sentence highlighting importance of using factor - point out two issues with direct HttpClient instantiation
+
+
 As recommended in Chapter 1, Microsoft developers constructing cloud-native applications should target .NET Core. Version 2.1 introduced the [HTTPClientFactory](https://www.stevejgordon.co.uk/introduction-to-httpclientfactory-aspnetcore) library for creating HTTP Client instances for interacting with URL-based resources. Superseding the original HTTPClient class, the factory class supports many enhanced features, one of which is [tight integration](../microservices/implement-resilient-applications/implement-http-call-retries-exponential-backoff-polly.md) with the Polly resiliency library. With it, you can easily define resiliency policies in the application Startup class to handle partial failures and connectivity issues.
 
 Next, let's expand on retry and circuit breaker patterns.
@@ -76,6 +79,13 @@ In the previous figure, a Circuit Breaker pattern has been added to the original
 Keep in mind that the intent of the Circuit Breaker pattern is *different* than that of the Retry pattern. The Retry pattern enables an application to retry an operation in the expectation that it will succeed. The Circuit Breaker pattern prevents an application from doing an operation that is likely to fail. Often, an application will *combine* these two patterns by using the Retry pattern to invoke an operation through a circuit breaker. However, the retry logic should be sensitive to any exceptions returned by the circuit breaker and abandon retry attempts if the circuit breaker indicates that a fault isn't transient.
 
 Application resiliency is a must for handling problematic requested operations. But, it's only half of the story. Next, we cover resiliency features available in the Azure cloud.
+
+## Testing for resiliency
+
+Testing for resiliency—Normally resiliency testing cannot be done the same way that you test application functionality (by running unit tests, integration tests and so on). Instead, you must test how the end-to-end workload performs under failure conditions which only occur intermittently. For example: inject failures by crashing processes, expired certificates, make dependent services unavailable etc. Frameworks like chaos monkey can be used for such chaos testing.
+
+
+
 
 >[!div class="step-by-step"]
 >[Previous](resiliency.md)
