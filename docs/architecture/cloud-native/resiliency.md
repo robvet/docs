@@ -10,7 +10,7 @@ Resiliency is the ability of your system to react to failure and still remain fu
 
 Cloud-native systems take full advantage of the cloud computing model. Your services must know how to thrive in a dynamic, virtualized cloud environment. They will make extensive use of Platform as a Service (PaaS) compute infrastructure and managed services. The caveat: Cloud infrastructure and networking are inherently unreliable.
 
-Cloud vendors are able to detect and mitigate platform failure. Your service will be restarted, scale out and in, and distributed across nodes. Your services must be design services to run in this environment.  
+Cloud vendors are able to detect and mitigate platform failure. Your service will be restarted, scale out and in, and distributed across nodes. Your services must be design services to detect these environmental scenarios and recover.  
 
 
 > Discuss Resil, Redund, Consistency, and Avail
