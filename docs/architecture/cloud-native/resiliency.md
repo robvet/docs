@@ -6,11 +6,11 @@ ms.date: 04/14/2020
 
 # Cloud-native resiliency
 
-Resiliency is the ability of your system to react to failure and still remain functional. It's not about avoiding failure, but accepting failure as inevitable and building your in cloud-native services to respond to it. The end-goal of resiliency is to return the application to a fully functioning state after a failure.
+Resiliency is the ability of your system to react to failure and still remain functional. It's not about avoiding failure, but accepting failure as inevitable and crafting  your cloud-native services to respond to it. The end-goal is to return the application to a fully functioning state after a failure.
 
-Cloud-native systems take full advantage of the cloud computing model. Your services must know how to thrive in a dynamic, virtualized cloud environment. They will make extensive use of Platform as a Service (PaaS) compute infrastructure and managed services. The caveat: Cloud infrastructure and networking are inherently unreliable.
+Cloud-native systems take full advantage of the cloud computing model. Your services must know how to thrive in a dynamic, virtualized cloud environment. They'll make extensive use of Platform as a Service (PaaS) compute infrastructure and managed services. The caveat: Cloud infrastructure and networking are inherently unreliable.
 
-Cloud vendors are able to detect and mitigate platform failure. Your service will be restarted, scale out and in, and distributed across nodes. Your services must be design services to detect these environmental scenarios and recover.  
+Cloud vendors can detect and mitigate platform failure. Your service will be restarted, scale out and in, and distributed across nodes. Your services must be design services to detect these environmental scenarios and recover.  
 
 
 > Discuss Resil, Redund, Consistency, and Avail
@@ -22,24 +22,23 @@ Unlike traditional monolithic applications, where everything runs together in a 
 
 **Figure 6-1.** Distributed cloud-native environment
 
-In the previous figure, note how each client, microservice, and cloud-based [backing service](https://12factor.net/backing-services) executes as a separate process, running across different server infrastructure, all communicating via network-based calls.
+Note in the previous figure how each microservice and cloud-based [backing service](https://12factor.net/backing-services) execute as a separate process, running across different server infrastructure, and communicating via network-based calls.
 
 With such a design, what could go wrong?
 
 - Unexpected [network latency](https://www.techopedia.com/definition/8553/network-latency).
-- [Transient faults](https://docs.microsoft.com/azure/architecture/best-practices/transient-faults)
-    (temporary network connectivity errors).
+- [Transient faults](https://docs.microsoft.com/azure/architecture/best-practices/transient-faults) (short-loved network connectivity errors).
 - Blockage by a long-running synchronous operation.
 - A host process that has crashed and is being restarted or moved.
 - An overloaded microservice that can't respond for a short time.
 - An in-flight Orchestrator operation such as a rolling upgrade or moving a service from one node to another.
 - Hardware failures from commodity hardware.
 
-When deploying distributed services in a cloud-based infrastructure, these factors become very real and you must design and develop defensively to deal with them.
+When deploying distributed cloud-native services across a cloud-based infrastructure, these factors are real. You must design and develop defensively to deal with them.
 
-In a smaller system, failure will be less frequent, but as that system scales up and out, you can expect to experience more and more issues - to a scale, perhaps,  where partial failure could become normal operation.
+In a smaller system, failure will be less frequent. But as a system scales up and out, you can expect to experience more and more issues - to a scale, perhaps, where partial failure could become more of a normal operation.
 
-Therefore, your application and infrastructure must be resilient. In the following sections, we'll explore defensive techniques that you can add to your application and managed cloud resources to minimize downtime and disruption.
+To be resilient, both your application and infrastructure must be resilient. In the following sections, we'll explore defensive techniques that you can add to your application and managed cloud resources to minimize downtime and disruption.
 
 >[!div class="step-by-step"]
 >[Previous](elastic-search-in-azure.md)

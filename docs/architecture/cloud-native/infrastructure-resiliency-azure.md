@@ -1,4 +1,4 @@
-git status---
+---
 title: Azure platform resiliency
 description: Architecting Cloud Native .NET Apps for Azure | Cloud Infrastructure Resiliency with Azure
 ms.date: 04/14/2020
